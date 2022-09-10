@@ -1,6 +1,8 @@
 package com.example.observeinternetconnection
 
+import android.util.Log
 import androidx.lifecycle.*
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
 
 class ConnectionViewModel(private val connectionRepo: ConnectionRepo) : ViewModel() {
@@ -11,9 +13,10 @@ class ConnectionViewModel(private val connectionRepo: ConnectionRepo) : ViewMode
 
     fun checkConnection() {
         viewModelScope.launch {
-            connectionRepo.observeConnection().collect {
-                _connectionStatus.value = it
-            }
+            connectionRepo.observeConnection()
+                .collect {
+                    _connectionStatus.value = it
+                }
         }
     }
 
